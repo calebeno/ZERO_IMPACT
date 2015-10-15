@@ -28,11 +28,11 @@ public class ObjectFactory : MonoBehaviour
 	}
 
 	// Build new wall
-	public static Enemy CreateEnemy(float x, float y, float v)
+	public static Enemy CreateEnemy(float x, float y, float vX, float vY)
 	{
 		var obj = (Enemy)Instantiate(instance.enemy,
 			new Vector3(0f, 0f, 0f), Quaternion.identity);
-		obj.Initialize(x, y, v);
+		obj.Initialize(x, y, vX, vY);
 		return obj;
 	}
 }

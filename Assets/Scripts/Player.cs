@@ -5,7 +5,10 @@ public class Player : MonoBehaviour
 {
 
 	public float speed;
-
+	public Sprite full;
+	public Sprite dam1;
+	public Sprite dam2;
+	public Sprite end;
 
 	// Use this for initialization
 	void Start()
@@ -17,6 +20,25 @@ public class Player : MonoBehaviour
 	void FixedUpdate()
 	{
 		PlayerMove();
+	}
+
+	void OnCollisionEnter2D(Collision2D col)
+	{
+		if (col.gameObject.name == "Enemy(Clone)")
+		{
+			if (this.GetComponent<SpriteRenderer>().sprite == full)
+			{
+				this.GetComponent<SpriteRenderer>().sprite = dam1;
+			}
+			else if (this.GetComponent<SpriteRenderer>().sprite == dam1)
+			{
+				this.GetComponent<SpriteRenderer>().sprite = dam2;
+			}
+			else if (this.GetComponent<SpriteRenderer>().sprite == dam2)
+			{
+				this.GetComponent<SpriteRenderer>().sprite = end;
+			}
+		}
 	}
 
 	void PlayerMove()
@@ -64,7 +86,7 @@ public class Player : MonoBehaviour
 		if (hit.collider != null)
 		{
 			float distance = Mathf.Abs(hit.point.x - point);
-			Debug.Log("X " + distance);
+			//Debug.Log("X " + distance);
 			if (distance <= speed)
 			{
 				return false;
@@ -81,7 +103,7 @@ public class Player : MonoBehaviour
 		if (hit.collider != null)
 		{
 			float distance = Mathf.Abs(hit.point.y - point);
-			Debug.Log("Y " + distance);
+			//Debug.Log("Y " + distance);
 			if (distance <= speed)
 			{
 				return false;
