@@ -17,6 +17,7 @@
 ####Preparing Assets and Scene
 Customizing the Camera
 - Set Skybox to black
+- Set Game size to 1280x720
 
 Import Sprites
 - Auto Import the player for multiple
@@ -103,6 +104,51 @@ public class ObjectFactory : MonoBehaviour
 - Add Wall prefab to script
 - Create ObjectFactory Prefab
 
+Building The Whole Wall:  The Game Controller
+- GameController manages the game state and builds the game objectes, such as the wall.
+
+```c#
+using UnityEngine;
+using UnityEngine.UI;
+using System.Collections;
+
+public class GameController : MonoBehaviour
+{
+
+	public int levelW;
+	public int levelH;
+	public Wall wall;
+
+	public int timerDefault;
+
+	private int score;
+	private int timer;
+	private bool _gameInPlay = true;
+
+	// Use this for initialization
+	void Start()
+	{
+		for (float i = 0; i < levelW; i = i + .5f)
+		{
+			for (float j = 0; j < levelH; j = j + .5f)
+			{
+				if (i == 0 || i == levelW - .5f)
+				{
+					ObjectFactory.CreateWall(i - (levelW / 2), j - (levelH / 2));
+				}
+				else if (j == 0 || j == levelH - .5f)
+				{
+					ObjectFactory.CreateWall(i - (levelW / 2), j - (levelH / 2));
+				}
+			}
+		}
+	}
+}
+```
+
+- Create GameObject "GameController"
+- Add Script
+- Set levelW to 18, levelH to 10
 
 ```c#
 
