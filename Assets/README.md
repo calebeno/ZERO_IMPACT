@@ -35,6 +35,7 @@ Create Prefab for Wall
 - Apply BoxCollider
 - Add New Script "Wall"
 - Make Prefab
+- Put Wall on the 8th Layer
 
 Add a few walls to scene
 - Cumbersom to add walls manually
@@ -254,12 +255,16 @@ public class Player : MonoBehaviour
 ```
 - Set speed to 0.04 in unity.
 - Make Player a Prefab
+- Put Enemy on the 9th Layer
 - Explain raycasting
 
 
 Add Player To ObjectFactory
 - Add Code to ObjectFactory.cs
 ```c#
+...
+public Player player;
+...
 	// Build new player
 	public static Player CreatePlayer(float x, float y)
 	{
@@ -268,7 +273,9 @@ Add Player To ObjectFactory
 		obj.Initialize(x, y);
 		return obj;
 	}
+...
 ```
+- Add Player Prefab to ObjectFactory in Unity
 
 Add Player Generation to GameController
 - Add Code to GameController.cs
@@ -319,7 +326,204 @@ public class Enemy : MonoBehaviour
 }
 ```
 - Make Enemy a Prefab
+- Put Enemy on the 10th Layer
 
+Add Enemy to Object Factory
+- Add Code to ObjectFactory.cs
+```c#
+...
+	public Enemy enemy;
+...
+	// Build new enemy
+	public static Enemy CreateEnemy(float x, float y, float vX, float vY)
+	{
+		var obj = (Enemy)Instantiate(instance.enemy,
+			new Vector3(0f, 0f, 0f), Quaternion.identity);
+		obj.Initialize(x, y, vX, vY);
+		return obj;
+	}
+...
+```
+- Add Enemy Prefab to ObjectFactory in Unity
+
+Generate Enemies
+- Create a count to generate initial enemies
+- Add Code to GameController.cs:
+```c#
+...
+public Enemy enemy;
+...
+public int count;
+...
+while (count > 0)
+		{
+			BuildEnemy();
+			count--;
+		}
+
+		timer = timerDefault;
+...
+// FixedUpdate is called once per frame
+	void FixedUpdate()
+	{
+		if (timer <= 0)
+		{
+			BuildEnemy();
+			timer = timerDefault;
+		}
+		else
+		{
+			timer--;
+		}
+	}
+...
+void BuildEnemy()
+	{
+		float wallsize = wall.GetComponent<SpriteRenderer>().bounds.size.x;
+		float enemysize = enemy.GetComponent<SpriteRenderer>().bounds.size.x;
+
+		float x = Random.Range(-(levelW / 2) + wallsize, levelW - (levelW / 2) - enemysize); ;
+		float y = Random.Range(-(levelH / 2) + wallsize, levelH - (levelH / 2) - enemysize);
+
+		int vX = 0;
+		int vY = 0;
+
+		while (vX == 0)
+		{
+			vX = Random.Range(-1, 1);
+		}
+		while (vY == 0)
+		{
+			vY = Random.Range(-1, 1);
+		}
+		vX = vX * 5;
+		vY = vY * 5;
+
+		ObjectFactory.CreateEnemy(x, y, vX, vY);
+	}
+...
+```
+- Set count to 5 and timerDefault to 60, and set enemy to Enemy prefab in Unity
+
+####Player Response to Hits
+- Add Code to Player.cs
+```c#
+...
+	public Sprite full;
+	public Sprite dam1;
+	public Sprite dam2;
+	public Sprite end;
+...
+void OnCollisionEnter2D(Collision2D col)
+	{
+		if (col.gameObject.name == "Enemy(Clone)")
+		{
+			if (this.GetComponent<SpriteRenderer>().sprite == full)
+			{
+				this.GetComponent<SpriteRenderer>().sprite = dam1;
+			}
+			else if (this.GetComponent<SpriteRenderer>().sprite == dam1)
+			{
+				this.GetComponent<SpriteRenderer>().sprite = dam2;
+			}
+			else if (this.GetComponent<SpriteRenderer>().sprite == dam2)
+			{
+				this.GetComponent<SpriteRenderer>().sprite = end;
+				gameController.gameInPlay = false;
+			}
+		}
+	}
+...
+```
+- Add sprites to Player Prefab in Unity
+
+####Adding Menus
+- Create New Scene, "start_menu"
+
+Create LevelController
+- New GameObject, LevelController script
+- Add Code to LevelController.cs
+```c#
+using UnityEngine;
+using System.Collections;
+
+public class LevelController : MonoBehaviour
+{
+
+	public void LoadLevel(string name)
+	{
+		Application.LoadLevel(name);
+	}
+
+	public void ReloadLevel()
+	{
+		Application.LoadLevel(Application.loadedLevel);
+	}
+
+	public void LoadNextLevel()
+	{
+		Application.LoadLevel(Application.loadedLevel + 1);
+	}
+
+	public void QuitRequest()
+	{
+		Application.Quit();
+	}
+}
+```
+- Add Canvas, Image, and Buttons
+- Add function calls to Buttons
+- Build Order
+
+####Adding Score and Endgame
+- Add text element to Canvus
+- Add Code to GameController.cs
+```c#
+...
+public Text scoreWriter;
+...
+if (gameInPlay)
+		{
+			score++;
+			scoreWriter.text = "Score: " + score.ToString();
+		}
+...
+```
+
+Adding Hidden UI Elements
+- Place Game Over Image
+- Copy Menu buttons
+- Add GameObject "Disabled"
+- Add Code to GameController.cs
+```c#
+...
+public Image gameOver;
+public Button start;
+public Button quit;
+public Canvas canvas;
+public GameObject disabled;
+...
+ObjectFactory.CreatePlayer(0f, 0f);
+gameOver.transform.SetParent(disabled.transform);
+start.transform.SetParent(disabled.transform);
+quit.transform.SetParent(disabled.transform);
+...
+if (gameInPlay)
+{
+	score++;
+	scoreWriter.text = "Score: " + score.ToString();
+}
+else
+{
+	if (gameOver.transform.parent != canvas.transform)
+	{
+		gameOver.transform.SetParent(canvas.transform);
+		start.transform.SetParent(canvas.transform);
+		quit.transform.SetParent(canvas.transform);
+	}
+}
+...
+```
 
 
 ```c#

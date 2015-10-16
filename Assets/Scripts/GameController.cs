@@ -17,6 +17,7 @@ public class GameController : MonoBehaviour
 	public Canvas canvas;
 	public GameObject disabled;
 
+	public int count;
 	public int timerDefault;
 
 	private int score;
@@ -45,8 +46,6 @@ public class GameController : MonoBehaviour
 				}
 			}
 		}
-
-		int count = 5;
 
 		while (count > 0)
 		{
@@ -92,13 +91,7 @@ public class GameController : MonoBehaviour
 		float enemysize = enemy.GetComponent<SpriteRenderer>().bounds.size.x;
 
 		float x = Random.Range(-(levelW / 2) + wallsize, levelW - (levelW / 2) - enemysize); ;
-		float y = Random.Range(-(levelH / 2) + wallsize, levelH - (levelH / 2) - enemysize); ;
-
-		// Add code to prevent enemy appearing on top of the player
-		//while ( (x <= ) ) {
-		//x = Random.Range(-(levelW / 2) + wallsize, levelW - (levelW / 2) - enemysize);
-		//y = Random.Range(-(levelH / 2) + wallsize, levelH - (levelH / 2) - enemysize);
-		//}
+		float y = Random.Range(-(levelH / 2) + wallsize, levelH - (levelH / 2) - enemysize);
 
 		int vX = 0;
 		int vY = 0;
