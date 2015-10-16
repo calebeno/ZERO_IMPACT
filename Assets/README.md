@@ -259,7 +259,7 @@ public class Player : MonoBehaviour
 
 Add Player To ObjectFactory
 - Add Code to ObjectFactory.cs
-``c#
+```c#
 	// Build new player
 	public static Player CreatePlayer(float x, float y)
 	{
