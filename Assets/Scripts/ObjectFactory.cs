@@ -11,6 +11,7 @@ public class ObjectFactory : MonoBehaviour
 
 	// Prefab variables, must be manually inserted from Unity UI
 	public Wall wall;
+	public Player player;
 	public Enemy enemy;
 
 	void Awake()
@@ -27,7 +28,16 @@ public class ObjectFactory : MonoBehaviour
 		return obj;
 	}
 
-	// Build new wall
+	// Build new player
+	public static Player CreatePlayer(float x, float y)
+	{
+		var obj = (Player)Instantiate(instance.player,
+			new Vector3(0f, 0f, 0f), Quaternion.identity);
+		obj.Initialize(x, y);
+		return obj;
+	}
+
+	// Build new enemy
 	public static Enemy CreateEnemy(float x, float y, float vX, float vY)
 	{
 		var obj = (Enemy)Instantiate(instance.enemy,

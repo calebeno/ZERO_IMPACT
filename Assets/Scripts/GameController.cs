@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 
 public class GameController : MonoBehaviour
@@ -8,12 +9,28 @@ public class GameController : MonoBehaviour
 	public int levelH;
 	public Wall wall;
 	public Enemy enemy;
-	private int timer;
+	public Player player;
+	public Text scoreWriter;
+	public Image gameOver;
+	public Button start;
+	public Button quit;
+	public Canvas canvas;
+	public GameObject disabled;
+
 	public int timerDefault;
+
+	private int score;
+	private int timer;
+	private bool _gameInPlay = true;
 
 	// Use this for initialization
 	void Start()
 	{
+		ObjectFactory.CreatePlayer(0f, 0f);
+		gameOver.transform.SetParent(disabled.transform);
+		start.transform.SetParent(disabled.transform);
+		quit.transform.SetParent(disabled.transform);
+
 		for (float i = 0; i < levelW; i = i + .5f)
 		{
 			for (float j = 0; j < levelH; j = j + .5f)
@@ -52,6 +69,21 @@ public class GameController : MonoBehaviour
 		{
 			timer--;
 		}
+
+		if (gameInPlay)
+		{
+			score++;
+			scoreWriter.text = "Score: " + score.ToString();
+		}
+		else
+		{
+			if (gameOver.transform.parent != canvas.transform)
+			{
+				gameOver.transform.SetParent(canvas.transform);
+				start.transform.SetParent(canvas.transform);
+				quit.transform.SetParent(canvas.transform);
+			}
+		}
 	}
 
 	void BuildEnemy()
@@ -59,8 +91,8 @@ public class GameController : MonoBehaviour
 		float wallsize = wall.GetComponent<SpriteRenderer>().bounds.size.x;
 		float enemysize = enemy.GetComponent<SpriteRenderer>().bounds.size.x;
 
-		float x = Random.Range(-(levelW / 2) + wallsize, levelW - (levelW / 2) - enemysize);;
-		float y = Random.Range(-(levelH / 2) + wallsize, levelH - (levelH / 2) - enemysize);;
+		float x = Random.Range(-(levelW / 2) + wallsize, levelW - (levelW / 2) - enemysize); ;
+		float y = Random.Range(-(levelH / 2) + wallsize, levelH - (levelH / 2) - enemysize); ;
 
 		// Add code to prevent enemy appearing on top of the player
 		//while ( (x <= ) ) {
@@ -85,5 +117,9 @@ public class GameController : MonoBehaviour
 		ObjectFactory.CreateEnemy(x, y, vX, vY);
 	}
 
-
+	public bool gameInPlay
+	{
+		get { return _gameInPlay; }
+		set { _gameInPlay = value; }
+	}
 }

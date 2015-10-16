@@ -9,23 +9,34 @@ public class Player : MonoBehaviour
 	public Sprite dam1;
 	public Sprite dam2;
 	public Sprite end;
+	public AudioClip hitSound;
+
+	private GameController gameController;
 
 	// Use this for initialization
-	void Start()
+	public void Initialize(float x, float y)
 	{
-
+		gameController = GameObject.FindObjectOfType<GameController>();
+		this.transform.position = new Vector2(x, y);
 	}
 
 	// Update is called once per frame
 	void FixedUpdate()
 	{
-		PlayerMove();
+		if (gameController.gameInPlay)
+		{
+			PlayerMove();
+		}
 	}
 
 	void OnCollisionEnter2D(Collision2D col)
 	{
 		if (col.gameObject.name == "Enemy(Clone)")
 		{
+			if (gameController.gameInPlay)
+			{
+				AudioSource.PlayClipAtPoint(hitSound, transform.position, 0.5f);
+			}
 			if (this.GetComponent<SpriteRenderer>().sprite == full)
 			{
 				this.GetComponent<SpriteRenderer>().sprite = dam1;
@@ -37,6 +48,7 @@ public class Player : MonoBehaviour
 			else if (this.GetComponent<SpriteRenderer>().sprite == dam2)
 			{
 				this.GetComponent<SpriteRenderer>().sprite = end;
+				gameController.gameInPlay = false;
 			}
 		}
 	}
