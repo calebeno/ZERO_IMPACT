@@ -290,6 +290,35 @@ public bool gameInPlay
 ...
 ```
 
+####Add an Enemy
+- Empty GameObject, SpriteRenderer, Enemy Script, Box Collider 2D
+- Create Bouncy Physics2DMaterial, Friction 0, bounciness 1
+- Add Bouncy Material to Collider
+- RigidBody2D, Mass 1, Drag 0, Gravity 0
+- Add Code to Enemy.cs:
+```c#
+using UnityEngine;
+using System.Collections;
+
+public class Enemy : MonoBehaviour
+{
+
+	public float constantSpeed;
+
+	// Use this for initialization
+	public void Initialize(float x, float y, float vX, float vY)
+	{
+		this.transform.position = new Vector2(x, y);
+		this.GetComponent<Rigidbody2D>().velocity = new Vector2(vX, vY);
+	}
+
+	void Update()
+	{
+		this.GetComponent<Rigidbody2D>().velocity = constantSpeed * (this.GetComponent<Rigidbody2D>().velocity.normalized);
+	}
+}
+```
+- Make Enemy a Prefab
 
 
 
