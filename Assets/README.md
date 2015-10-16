@@ -525,7 +525,49 @@ else
 ...
 ```
 
+####Build And Run the Game
+- Got to Build
+- Set the Settings
+- Build and Run
 
+####Audio
+- GameObject, MusicPlayerScript, Audio Source Component
+- Audio Component To Retro, Play on Awake, Loop
+- Add Code to MusicPlayer.cs
 ```c#
+using UnityEngine;
+using System.Collections;
 
+public class MusicPlayer : MonoBehaviour
+{
+
+	static MusicPlayer instance = null;
+
+	void Awake()
+	{
+		if (instance != null)
+		{
+			Destroy(gameObject);
+		}
+		else
+		{
+			instance = this;
+			GameObject.DontDestroyOnLoad(gameObject);
+		}
+	}
+}
 ```
+
+Sound Effects on Hit
+- Add Code to Player.cs
+```c#
+public AudioClip hitSound;
+...
+if (col.gameObject.name == "Enemy(Clone)")
+		{
+			if (gameController.gameInPlay)
+			{
+				AudioSource.PlayClipAtPoint(hitSound, transform.position, 0.5f);
+			}
+```
+- Set hitSound in Unity
