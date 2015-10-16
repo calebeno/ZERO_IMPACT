@@ -15,8 +15,13 @@
 - Materials
 
 ####Preparing Assets and Scene
-* Customizing the Camera
---- Set Skybox to black
+Customizing the Camera
+- Set Skybox to black
+
+Import Sprites
+- Auto Import the player for multiple
+- Set all to bottom-left origin point
+
 
 ####
 
