@@ -49,7 +49,23 @@ Script Execution Order and Unity Methods
 - `FixedUpdated()` Called once per frame of the game.
 
 Edit the Wall Script
-- 
+- Wall is added by script, so build custom `Initialization()`
+- Requires an x and y coordinate.
+
+```c#
+using UnityEngine;
+using System.Collections;
+
+public class Wall : MonoBehaviour
+{
+
+	// Use this for initialization
+	public void Initialize(float x, float y)
+	{
+		this.transform.position = new Vector3(x, y, 0f);
+	}
+}
+```
 
 ```c#
 
