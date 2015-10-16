@@ -15,8 +15,8 @@
 - Materials
 
 ####Preparing Assets and Scene
-- Customizing the Camera
---* Set Skybox to black
+* Customizing the Camera
+--- Set Skybox to black
 
 ####
 
