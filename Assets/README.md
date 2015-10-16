@@ -274,11 +274,23 @@ Add Player Generation to GameController
 - Add Code to GameController.cs
 ```c#
 ...
+public Player player;
+...
+private bool _gameInPlay = true;
+...
 void Start()
 	{
 		ObjectFactory.CreatePlayer(0f, 0f);
 ...
+public bool gameInPlay
+	{
+		get { return _gameInPlay; }
+		set { _gameInPlay = value; }
+	}
+...
 ```
+
+
 
 
 ```c#
