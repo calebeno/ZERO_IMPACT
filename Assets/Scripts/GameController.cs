@@ -17,7 +17,7 @@ public class GameController : MonoBehaviour
 	public Canvas canvas;
 	public GameObject disabled;
 
-	public int count;
+	public int startCount;
 	public int timerDefault;
 
 	private int score;
@@ -47,10 +47,10 @@ public class GameController : MonoBehaviour
 			}
 		}
 
-		while (count > 0)
+		while (startCount > 0)
 		{
 			BuildEnemy();
-			count--;
+			startCount--;
 		}
 
 		timer = timerDefault;
