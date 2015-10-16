@@ -51,7 +51,6 @@ Script Execution Order and Unity Methods
 Edit the Wall Script
 - Wall is added by script, so build custom `Initialization()`
 - Requires an x and y coordinate.
-
 ```c#
 using UnityEngine;
 using System.Collections;
@@ -66,6 +65,44 @@ public class Wall : MonoBehaviour
 	}
 }
 ```
+
+Building a Wall:  The Object Factory
+- Need an Object Factory to create the wall object and run its `Initialization()`
+```c#
+using UnityEngine;
+using System.Collections;
+using UnityEngine.UI;
+
+public class ObjectFactory : MonoBehaviour
+{
+	//// DESCRIPTION:  The Object Factory handles the creation and instantiation of new objects
+
+	// Holds the instance of the ObjectFactory
+	protected static ObjectFactory instance; // Needed
+
+	// Prefab variables, must be manually inserted from Unity UI
+	public Wall wall;
+
+	void Awake()
+	{
+		instance = this;
+	}
+
+	// Build new wall
+	public static Wall CreateWall(float x, float y)
+	{
+		var obj = (Wall)Instantiate(instance.wall,
+			new Vector3(0f, 0f, 0f), Quaternion.identity);
+		obj.Initialize(x, y);
+		return obj;
+	}
+}
+```
+- Create GameObject "ObjectFactory"
+- Add Script
+- Add Wall prefab to script
+- Create ObjectFactory Prefab
+
 
 ```c#
 
